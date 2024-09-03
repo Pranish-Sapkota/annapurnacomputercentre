@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pr.com</title>
+	<style>
+		body {
+			background-color: #000;
+			text-align: center;
+			height: 100vh;
+			margin: 0;
+		}
+		.old-english {
+			font-family: "Old English Text MT", serif;
+			color: #fff;
+			font-size: 70px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			white-space: nowrap;
+			overflow: hidden;
+			border-right: 4px solid #fff;
+			z-index: 1; /* add z-index to bring text to front */
+		}
+		.smoke {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+			z-index: 0; /* add z-index to send smoke to back */
+		}
+		.smoke-particle {
+			position: absolute;
+			width: 10px;
+			height: 10px;
+			background-color: rgba(255, 255, 255, 0.5);
+			border-radius: 50%;
+			animation: smoke-particle 3s infinite;
+		}
+		@keyframes smoke-particle {
+			0% {
+				transform: translateY(0);
+				opacity: 1;
+			}
+			100% {
+				transform: translateY(-100%);
+				opacity: 0;
+			}
+		}
+		.char-animate {
+			animation: char-animate 0.5s forwards;
+			animation-delay: 0.1s;
+		}
+		@keyframes char-animate {
+			0% {
+				transform: translateY(20px);
+				opacity: 0;
+			}
+			100% {
+				transform: translateY(0);
+				opacity: 1;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="smoke" id="smoke"></div>
+	<div class="old-english" id="typing-text">
+		<span id="text"></span>
+	</div>
+
+	<script>
+		const textElement = document.getElementById('text');
+		const typingTextElement = document.getElementById('typing-text');
+		const smokeElement = document.getElementById('smoke');
+
+		let text = 'pranish pr sapkota';
+		let i = 0;
+
+		function type() {
+			if (i < text.length) {
+				let char = text[i];
+				let span = document.createElement('span');
+				span.textContent = char;
+				span.className = 'char-animate'; 
+				textElement.appendChild(span);
+				i++;
+				setTimeout(type, 150); 
+			} else {
+				typingTextElement.style.borderRight = 'none'; 
+				setTimeout(() => {
+					window.location.href = 'myself.html'; // redirect to portfolio page
+				}, 2000); // wait 2 seconds before redirecting
+			}
+		}
+
+		function createSmokeParticle() {
+			let particle = document.createElement('div');
+			particle.className = 'smoke-particle';
+			particle.style.top = Math.random() * 100 + 'vh';
+			particle.style.left = Math.random() * 100 + 'vw';
+			smokeElement.appendChild(particle);
+			setTimeout(() => {
+				particle.remove();
+			}, 3000);
+		}
+
+		setInterval(createSmokeParticle, 50);
+
+		type();
+	</script>
+</body>
+</html>
